@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Open Sans', sans-serif;
+    color: #434343;
+    background-color: #f4f6f9;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Underline input style matching Figma design */
+  .input-underline {
+    @apply w-full bg-transparent border-0 border-b border-line-medium pb-2 pt-1 text-sm text-text-primary placeholder-text-disabled focus:outline-none focus:border-brand-red transition-colors;
+  }
+
+  .input-underline.error {
+    @apply border-text-error;
+  }
+}
