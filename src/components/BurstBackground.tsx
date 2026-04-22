@@ -1,33 +1,98 @@
-// Faint decorative burst pattern (bottom-right) — matches Figma background
-export default function BurstBackground() {
+/**
+ * Singlife pinwheel burst — exact SVG from reference (mysinglife.singlife.com).
+ * 18 blades × 20° intervals, same blade path + inner transforms, each rotated.
+ * Original uses feColorMatrix filter (white→red). Here we fill red directly.
+ *
+ * Login page:  opacity={1}   (default)
+ * Other pages: opacity={0.08}
+ */
+
+interface BurstBackgroundProps {
+  opacity?: number
+}
+
+// Exact rotation transforms from the Lottie SVG (18 blades × 20°)
+const BLADE_TRANSFORMS = [
+  'matrix(1,0,0,1,0,0)',
+  'matrix(0.9396926164627075,0.3420201539993286,-0.3420201539993286,0.9396926164627075,242.5859375,-295.77337646484375)',
+  'matrix(0.7660444378852844,0.6427876353263855,-0.6427876353263855,0.7660444378852844,571.70263671875,-490.7401123046875)',
+  'matrix(0.5,0.8660253882408142,-0.8660253882408142,0.5,947.6537475585938,-561.3843994140625)',
+  'matrix(0.1736481785774231,0.9848077297210693,-0.9848077297210693,0.1736481785774231,1325.093994140625,-499.1854248046875)',
+  'matrix(-0.1736481785774231,0.9848077297210693,-0.9848077297210693,-0.1736481785774231,1658.4984130859375,-311.64544677734375)',
+  'matrix(-0.5,0.8660253882408142,-0.8660253882408142,-0.5,1907.65380859375,-21.3843994140625)',
+  'matrix(-0.7660444378852844,0.6427876353263855,-0.6427876353263855,-0.7660444378852844,2042.5079345703125,336.587890625)',
+  'matrix(-0.9396926164627075,0.3420201539993286,-0.3420201539993286,-0.9396926164627075,2046.7957763671875,719.0946655273438)',
+  'matrix(-1,0,0,-1,1920,1080)',
+  'matrix(-0.9396926164627075,-0.3420201539993286,0.3420201539993286,-0.9396926164627075,1677.4140625,1375.7734375)',
+  'matrix(-0.7660444378852844,-0.6427876353263855,0.6427876353263855,-0.7660444378852844,1348.29736328125,1570.7401123046875)',
+  'matrix(-0.5,-0.8660253882408142,0.8660253882408142,-0.5,972.3462524414062,1641.3843994140625)',
+  'matrix(-0.1736481785774231,-0.9848077297210693,0.9848077297210693,-0.1736481785774231,594.9060668945312,1579.1854248046875)',
+  'matrix(0.1736481785774231,-0.9848077297210693,0.9848077297210693,0.1736481785774231,261.5015869140625,1391.6455078125)',
+  'matrix(0.5,-0.8660253882408142,0.8660253882408142,0.5,12.34625244140625,1101.3843994140625)',
+  'matrix(0.7660444378852844,-0.6427876353263855,0.6427876353263855,0.7660444378852844,-122.5079345703125,743.412109375)',
+  'matrix(0.9396926164627075,-0.3420201539993286,0.3420201539993286,0.9396926164627075,-126.7957763671875,360.90533447265625)',
+]
+
+// Exact blade path from reference Lottie SVG
+const BLADE_PATH = 'M-631.301025390625,-694.1500244140625 C-631.301025390625,-694.1500244140625 -628.5910034179688,-688.0440063476562 -628.5910034179688,-688.0440063476562 C-628.5910034179688,-688.0440063476562 -640.6069946289062,-682.8330078125 -640.6069946289062,-682.8330078125 C-640.6069946289062,-682.8330078125 -643.281005859375,-689.5369873046875 -643.281005859375,-689.5369873046875 C-654.6370239257812,-720.7659912109375 -651.5659790039062,-754.6129760742188 -634.5659790039062,-783.1719970703125 C-634.5659790039062,-783.1719970703125 -622.8489990234375,-777.291015625 -622.8489990234375,-777.291015625 C-637.8209838867188,-752.14599609375 -641.3049926757812,-721.6610107421875 -631.301025390625,-694.1500244140625z'
+
+export default function BurstBackground({ opacity = 1 }: BurstBackgroundProps) {
   return (
     <div
-      className="pointer-events-none fixed bottom-0 right-0 opacity-10 overflow-hidden"
-      style={{ width: '794px', height: '794px', transform: 'translate(310px, 190px)' }}
+      className="pointer-events-none absolute top-0 right-0 overflow-hidden"
+      style={{ width: 652, height: 744, zIndex: 0, opacity }}
       aria-hidden="true"
     >
-      <svg viewBox="0 0 794 794" fill="none" xmlns="http://www.w3.org/2000/svg">
-        {Array.from({ length: 18 }).map((_, i) => {
-          const angle = (i * 20 * Math.PI) / 180
-          const x1 = 397 + 150 * Math.cos(angle)
-          const y1 = 397 + 150 * Math.sin(angle)
-          const x2 = 397 + 380 * Math.cos(angle)
-          const y2 = 397 + 380 * Math.sin(angle)
-          return (
-            <line
-              key={i}
-              x1={x1}
-              y1={y1}
-              x2={x2}
-              y2={y2}
-              stroke="#FF0008"
-              strokeWidth="3"
-              strokeLinecap="round"
-            />
-          )
-        })}
-        <circle cx="397" cy="397" r="140" stroke="#FF0008" strokeWidth="2" fill="none" />
-        <circle cx="397" cy="397" r="80" stroke="#FF0008" strokeWidth="1.5" fill="none" />
+      <svg
+        viewBox="0 0 652 744"
+        width="652"
+        height="744"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <defs>
+          {/* Viewport clip */}
+          <clipPath id="burst-vp-clip">
+            <rect width="652" height="744" x="0" y="0" />
+          </clipPath>
+
+          {/*
+           * Shared mask shape — identical rectangle used by all 18 blade masks.
+           * In the reference each blade had its own mask ID but the same content.
+           * Sharing one mask is equivalent since all are in the same coord space.
+           */}
+          <mask id="burst-blade-mask" maskType="alpha">
+            <g transform="matrix(0.5807579755783081,-0.17659951746463776,0.29387757182121277,0.9559264183044434,873.6102905273438,516.0645751953125)">
+              <g transform="matrix(1,0,0,1,-11.385000228881836,-45.367000579833984)">
+                <path
+                  fill="white"
+                  d="M112.38500213623047,-67.63349914550781 112.38500213623047,67.63349914550781 -112.38500213623047,67.63349914550781 -112.38500213623047,-67.63349914550781z"
+                />
+              </g>
+            </g>
+          </mask>
+        </defs>
+
+        <g clipPath="url(#burst-vp-clip)">
+          {/*
+           * Outer scale+translate: maps 1920×1080 Lottie canvas → 652×744 viewport.
+           * Exact matrix from reference SVG.
+           */}
+          <g transform="matrix(2.696258544921875,0.8760223388671875,-0.8760223388671875,2.696258544921875,-1563.356201171875,-2078.961181640625)">
+            {BLADE_TRANSFORMS.map((t, i) => (
+              <g key={i} transform={t}>
+                <g mask="url(#burst-blade-mask)">
+                  {/* Inner transforms position the blade in 1920×1080 space */}
+                  <g transform="matrix(0.3329662084579468,1.240078330039978,1.2771979570388794,-0.34153592586517334,1008.6665649414062,533.3849487304688)">
+                    <g transform="matrix(1.004889965057373,0,0,1,564.4840087890625,631.85498046875)">
+                      <path fill="#FF0008" d={BLADE_PATH} />
+                    </g>
+                  </g>
+                </g>
+              </g>
+            ))}
+          </g>
+        </g>
       </svg>
     </div>
   )

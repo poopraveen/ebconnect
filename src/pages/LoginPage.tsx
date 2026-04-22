@@ -71,6 +71,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-page-bg relative overflow-hidden">
       <BurstBackground />
+      <div className="relative z-10 flex flex-col min-h-screen">
       <Masthead />
 
       {/* Main content — vertically and horizontally centred */}
@@ -156,6 +157,7 @@ export default function LoginPage() {
       </main>
 
       <Footer />
+      </div>
     </div>
   )
 }

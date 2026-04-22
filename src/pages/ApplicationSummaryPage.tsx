@@ -84,7 +84,8 @@ export default function ApplicationSummaryPage() {
 
   return (
     <div className="min-h-screen bg-page-bg relative overflow-x-hidden">
-      <BurstBackground />
+      <BurstBackground opacity={0.08} />
+      <div className="relative z-10 flex flex-col min-h-screen">
       <Masthead />
 
       <main className="pt-[134px] pb-[80px] px-4">
@@ -145,6 +146,7 @@ export default function ApplicationSummaryPage() {
       </main>
 
       <Footer />
+      </div>
     </div>
   )
 }
