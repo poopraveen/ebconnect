@@ -141,13 +141,19 @@ export default function DeclarationModal({ declaration, onClose, onConfirm }: De
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/30"
+      className="fixed inset-0 z-50 overflow-y-auto bg-black/30"
       onClick={handleBackdropClick}
       role="dialog"
       aria-modal="true"
     >
-      {/* Modal card — exact Figma dimensions: 584×758px, px-32 py-56 gap-24 */}
-      <div className="relative bg-white rounded-2xl w-[584px] h-[758px] flex flex-col items-center gap-6 px-8 py-14">
+      {/* Centering wrapper — sits inside the scrollable backdrop */}
+      <div className="flex min-h-full items-center justify-center px-4 py-[86px]">
+        {/* Modal card — 584px wide, max-height so content scrolls inside, never outside */}
+        <div
+          className="relative bg-white rounded-2xl w-[584px] max-w-full flex flex-col items-center gap-6 px-8 py-14"
+          style={{ maxHeight: 'min(758px, calc(100vh - 172px))' }}
+          onClick={e => e.stopPropagation()}
+        >
 
         {/* × close button — absolute top-[16px] right-[16px] size-[32px] */}
         <button
@@ -159,11 +165,11 @@ export default function DeclarationModal({ declaration, onClose, onConfirm }: De
           <CrossLine />
         </button>
 
-        {/* Scroll content area — h-[578px], clips overflow, custom scrollbar */}
-        <div className="relative w-full h-[578px] shrink-0 overflow-hidden flex flex-col">
+        {/* Scroll content area — grows to fill available space, min 0 */}
+        <div className="relative w-full flex-1 min-h-0 overflow-hidden flex flex-col">
 
           {/* Inner scroll + scrollbar row */}
-          <div className="flex gap-2 h-full overflow-hidden">
+          <div className="flex gap-2 flex-1 min-h-0 overflow-hidden">
             {/* Scrollable text */}
             <div
               ref={scrollRef}
@@ -254,6 +260,7 @@ export default function DeclarationModal({ declaration, onClose, onConfirm }: De
         >
           I confirm
         </button>
+        </div>
       </div>
     </div>
   )
